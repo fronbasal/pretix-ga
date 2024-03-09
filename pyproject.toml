@@ -1,0 +1,42 @@
+[project]
+name = "pretix-ga"
+dynamic = ["version"]
+description = "Adds Google Analytics capabilities to Pretix"
+readme = "README.rst"
+license = {text = "Apache"}
+keywords = ["pretix"]
+authors = [
+    {name = "fronbasal", email = "mail@fronbasal.de"},
+]
+maintainers = [
+    {name = "fronbasal", email = "mail@fronbasal.de"},
+]
+
+dependencies = [
+]
+
+[project.entry-points."pretix.plugin"]
+pretix_ga = "pretix_ga:PretixPluginMeta"
+
+[project.entry-points."distutils.commands"]
+build = "pretix_plugin_build.build:CustomBuild"
+
+[build-system]
+requires = [
+    "setuptools",
+    "pretix-plugin-build",
+]
+
+[project.urls]
+homepage = "https://github.com/fronbasal/pretix-ga"
+repository = "https://github.com/fronbasal/pretix-ga"
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.dynamic]
+version = {attr = "pretix_ga.__version__"}
+
+[tool.setuptools.packages.find]
+include = ["pretix*"]
+namespaces = false

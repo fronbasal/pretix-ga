@@ -1,0 +1,4 @@
+[plugin]
+package = "pretix-ga"
+modules = [ "pretix_ga" ]
+marketplace_name = "pretix-ga"
