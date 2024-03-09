@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-03-07 19:01+0100\n"
+"POT-Creation-Date: 2024-03-09 03:18+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: fronbasal\n"
 "Language-Team: \n"
@@ -10,3 +10,27 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+#: pretix_ga/apps.py:17
+msgid "Pretix Google Analytics"
+msgstr "Pretix Google Analytics"
+
+#: pretix_ga/apps.py:19
+msgid "Adds Google Analytics capabilities to Pretix"
+msgstr "Google Tag Manager Integration"
+
+#: pretix_ga/signals.py:23 pretix_ga/templates/pretix_ga/settings.html:5
+msgid "Google Analytics"
+msgstr "Google Analytics"
+
+#: pretix_ga/templates/pretix_ga/settings.html:14
+msgid "Save"
+msgstr "Speichern"
+
+#: pretix_ga/views.py:11
+msgid "Google Tag Manager Container ID"
+msgstr "Google Tag Manager Container ID"
+
+#: pretix_ga/views.py:13
+msgid "The Google Tag Manager Container ID (GTM-XXXXXXXX)."
+msgstr "Die Google Tag Manager Container ID (GTM-XXXXXXXX)."
