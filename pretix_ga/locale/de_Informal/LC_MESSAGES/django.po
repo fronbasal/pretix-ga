@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-09 03:18+0100\n"
+"POT-Creation-Date: 2024-03-14 19:05+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: fronbasal\n"
 "Language-Team: \n"
@@ -16,10 +16,12 @@ msgid "Pretix Google Analytics"
 msgstr "Pretix Google Analytics"
 
 #: pretix_ga/apps.py:19
-msgid "Adds Google Analytics capabilities to Pretix"
-msgstr "Google Tag Manager Integration"
+#, fuzzy
+#| msgid "Adds Google Analytics capabilities to Pretix"
+msgid "Adds Google Analytics tracking to Pretix"
+msgstr "Google Analytics tracking in Pretix"
 
-#: pretix_ga/signals.py:23 pretix_ga/templates/pretix_ga/settings.html:5
+#: pretix_ga/signals.py:22 pretix_ga/templates/pretix_ga/settings.html:5
 msgid "Google Analytics"
 msgstr "Google Analytics"
 
@@ -28,9 +30,15 @@ msgid "Save"
 msgstr "Speichern"
 
 #: pretix_ga/views.py:11
-msgid "Google Tag Manager Container ID"
-msgstr "Google Tag Manager Container ID"
+#, fuzzy
+#| msgid "Google Analytics"
+msgid "Google Analytics Measurements ID"
+msgstr "Google Analytics Measurement ID"
 
-#: pretix_ga/views.py:13
-msgid "The Google Tag Manager Container ID (GTM-XXXXXXXX)."
-msgstr "Die Google Tag Manager Container ID (GTM-XXXXXXXX)."
+#: pretix_ga/views.py:14
+msgid ""
+"You will find the Measurement ID in the Data Streams settings. Make sure "
+"you're working with a Web Stream."
+msgstr ""
+"Sie finden die Measurement ID in der Google Analytics Konsole unter \"Data Streams\"."
+

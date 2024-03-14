@@ -7,10 +7,12 @@ from pretix.control.views.event import EventSettingsFormView, EventSettingsViewM
 
 
 class GoogleAnalyticsSettingsForm(SettingsForm):
-    container_id = forms.CharField(
-        label=_("Google Tag Manager Container ID"),
+    measurement_id = forms.CharField(
+        label=_("Google Analytics Measurements ID"),
         required=True,
-        help_text=_("The Google Tag Manager Container ID (GTM-XXXXXXXX)."),
+        help_text=_(
+            "You will find the Measurement ID in the Data Streams settings. Make sure you're working with a Web Stream."
+        ),
         max_length=12,
         min_length=12,
     )

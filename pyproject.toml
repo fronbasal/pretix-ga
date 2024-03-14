@@ -6,10 +6,10 @@ readme = "README.rst"
 license = {text = "Apache"}
 keywords = ["pretix"]
 authors = [
-    {name = "fronbasal", email = "mail@fronbasal.de"},
+    {name = "Daniel Malik", email = "mail@fronbasal.de"},
 ]
 maintainers = [
-    {name = "fronbasal", email = "mail@fronbasal.de"},
+    {name = "Daniel Malik", email = "mail@fronbasal.de"},
 ]
 
 dependencies = [

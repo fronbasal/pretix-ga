@@ -3,7 +3,11 @@ Pretix Google Analytics
 
 This is a plugin for `pretix`_. 
 
-Adds Google Analytics capabilities to Pretix
+Adds Google Analytics capabilities to Pretix.
+
+Just a development version base, do not use in production as-is as it could expose sensitive data & doesn't support consent.
+
+See `pretix-tracking-codes <https://marketplace.pretix.eu/products/tracking/>`_ for an officially supported solution.
 
 Development setup
 -----------------
@@ -43,7 +47,7 @@ License
 -------
 
 
-Copyright 2024 fronbasal
+Copyright 2024 Daniel Malik
 
 Released under the terms of the Apache License 2.0
 

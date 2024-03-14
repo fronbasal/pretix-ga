@@ -1,45 +1,44 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: \n"
+"Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-03-14 19:05+0100\n"
-"PO-Revision-Date: \n"
-"Last-Translator: fronbasal\n"
-"Language-Team: \n"
-"Language: de\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-
 #: pretix_ga/apps.py:17
 msgid "Pretix Google Analytics"
-msgstr "Pretix Google Analytics"
+msgstr ""
 
 #: pretix_ga/apps.py:19
-#, fuzzy
-#| msgid "Adds Google Analytics capabilities to Pretix"
 msgid "Adds Google Analytics tracking to Pretix"
-msgstr "Google Analytics tracking in Pretix"
+msgstr ""
 
 #: pretix_ga/signals.py:22 pretix_ga/templates/pretix_ga/settings.html:5
 msgid "Google Analytics"
-msgstr "Google Analytics"
+msgstr ""
 
 #: pretix_ga/templates/pretix_ga/settings.html:14
 msgid "Save"
-msgstr "Speichern"
+msgstr ""
 
 #: pretix_ga/views.py:11
-#, fuzzy
-#| msgid "Google Analytics"
 msgid "Google Analytics Measurements ID"
-msgstr "Google Analytics Measurement ID"
+msgstr ""
 
 #: pretix_ga/views.py:14
 msgid ""
 "You will find the Measurement ID in the Data Streams settings. Make sure "
 "you're working with a Web Stream."
 msgstr ""
-"Sie finden die Measurement ID in der Google Analytics Konsole unter \"Data Streams\"."
-

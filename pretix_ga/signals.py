@@ -1,4 +1,3 @@
-# Register your receivers here
 import logging
 import secrets
 from django.dispatch import receiver
@@ -6,7 +5,7 @@ from django.urls import resolve, reverse
 from django.utils.translation import gettext_lazy as _
 from pretix.base.middleware import _merge_csp, _parse_csp, _render_csp
 from pretix.control.signals import nav_event_settings
-from pretix.presale.signals import html_head, html_page_header, process_response
+from pretix.presale.signals import html_page_header, process_response
 
 logger = logging.getLogger(__name__)
 
@@ -34,35 +33,25 @@ def navbar_event_settings(sender, request, **kwargs):
     ]
 
 
-@receiver(html_head, dispatch_uid="ga_html_head")
-def html_head_presale(sender, request, **kwargs):
-    container_id = sender.settings.get("container_id")
-    if container_id:
-        return """
-<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','%container');</script>
-        """.replace(
-            "%container", container_id
-        )
-
-
 @receiver(html_page_header, dispatch_uid="ga_html_page_header")
 def html_page_header_presale(sender, request, **kwargs):
-    container_id = sender.settings.get("container_id")
-    if container_id:
+    measurement_id = sender.settings.get("measurement_id")
+    if measurement_id:
         return f"""
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id={container_id}"
-height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script async src="https://www.googletagmanager.com/gtag/js?id={measurement_id}"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag()\u007bdataLayer.push(arguments);\u007d
+  gtag('js', new Date());
+  gtag('config', '{measurement_id}');
+</script>
         """
 
 
 @receiver(process_response, dispatch_uid="ga_process_response")
 def process_response_presale_csp(sender, request, response, **kwargs):
-    container_id = sender.settings.get("container_id")
-    if container_id:
+    measurement_id = sender.settings.get("measurement_id")
+    if measurement_id:
         if "Content-Security-Policy" in response:
             headers = _parse_csp(response["Content-Security-Policy"])
         else:
