@@ -9,6 +9,8 @@ Just a development version base, do not use in production as-is as it could expo
 
 See `pretix-tracking-codes <https://marketplace.pretix.eu/products/tracking/>`_ for an officially supported solution.
 
+Kudos to `pretix-gtm <https://github.com/savvystack/pretix-gtm>`_ - this code is inspired by theirs.
+
 Development setup
 -----------------
 
