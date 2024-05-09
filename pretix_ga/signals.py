@@ -1,5 +1,8 @@
 import logging
 import secrets
+from base64 import b64encode
+from hashlib import sha384
+
 from django.dispatch import receiver
 from django.urls import resolve, reverse
 from django.utils.translation import gettext_lazy as _
@@ -36,15 +39,19 @@ def navbar_event_settings(sender, request, **kwargs):
 @receiver(html_page_header, dispatch_uid="ga_html_page_header")
 def html_page_header_presale(sender, request, **kwargs):
     measurement_id = sender.settings.get("measurement_id")
-    if measurement_id:
-        return f"""
+    if not measurement_id:
+        return
+    # Generate a sha256 integrity hash for the script tag
+    script_content = f"""
+window.dataLayer = window.dataLayer || [];
+function gtag()\u007bdataLayer.push(arguments);\u007d
+gtag('js', new Date());
+gtag('config', '{measurement_id}');
+"""
+    integrity = 'sha384-' + b64encode(sha384(script_content.encode("utf-8")).digest()).decode('utf-8')
+    return f"""
 <script async src="https://www.googletagmanager.com/gtag/js?id={measurement_id}"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag()\u007bdataLayer.push(arguments);\u007d
-  gtag('js', new Date());
-  gtag('config', '{measurement_id}');
-</script>
+<script integrity="{integrity}">{script_content}</script>
         """
 
 
