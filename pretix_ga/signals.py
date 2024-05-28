@@ -75,6 +75,7 @@ def process_response_presale_csp(sender, request, response, **kwargs):
                     "https://*.googletagmanager.com",
                     "https://www.google-analytics.com",
                     "https://ssl.google-analytics.com",
+                    "https://analytics.google.com",
                 ],
                 "style-src": [
                     "'self'",
@@ -90,6 +91,7 @@ def process_response_presale_csp(sender, request, response, **kwargs):
                     "https://*.google-analytics.com",
                     "https://*.googletagmanager.com",
                     "https://www.google-analytics.com",
+                    "https://analytics.google.com",
                     "https://*.google.de",
                 ],
                 "font-src": ["'self'", "https://fonts.gstatic.com", "data:"],
@@ -99,6 +101,7 @@ def process_response_presale_csp(sender, request, response, **kwargs):
                     "https://*.analytics.google.com",
                     "https://*.googletagmanager.com",
                     "https://www.google-analytics.com",
+                    "https://analytics.google.com",
                     "https://*.doubleclick.net",
                 ],
             },
