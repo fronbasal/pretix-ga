@@ -70,6 +70,7 @@ def process_response_presale_csp(sender, request, response, **kwargs):
                 "script-src": [
                     "'self'",
                     "'unsafe-inline'",
+                    "'unsafe-eval'",
                     "https://www.googletagmanager.com",
                     "https://tagmanager.google.com",
                     "https://*.googletagmanager.com",
