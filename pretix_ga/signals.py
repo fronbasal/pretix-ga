@@ -13,10 +13,6 @@ from pretix.presale.signals import html_page_header, process_response
 logger = logging.getLogger(__name__)
 
 
-def generate_nonce(length=12):
-    return secrets.token_urlsafe(length)
-
-
 @receiver(nav_event_settings, dispatch_uid="ga_nav_event_settings")
 def navbar_event_settings(sender, request, **kwargs):
     url = resolve(request.path_info)
@@ -42,73 +38,69 @@ def html_page_header_presale(sender, request, **kwargs):
     if not measurement_id:
         return
     # Generate a sha256 integrity hash for the script tag
-    script_content = f"""
-window.dataLayer = window.dataLayer || [];
-function gtag()\u007bdataLayer.push(arguments);\u007d
-gtag('js', new Date());
-gtag('config', '{measurement_id}');
-"""
-    integrity = 'sha384-' + b64encode(sha384(script_content.encode("utf-8")).digest()).decode('utf-8')
-    return f"""
-<script async src="https://www.googletagmanager.com/gtag/js?id={measurement_id}"></script>
-<script integrity="{integrity}">{script_content}</script>
-        """
+    script_content = f"""window.dataLayer=window.dataLayer||[];function gtag(){{dataLayer.push(arguments);}}gtag('js',new Date());gtag('config','{measurement_id}');"""
+    integrity = "sha384-" + b64encode(
+        sha384(script_content.encode("utf-8")).digest()
+    ).decode("utf-8")
+    # store integrity hash in request for later csp processing
+    request._ga_script_hash = integrity
+    return f"""<script async src="https://www.googletagmanager.com/gtag/js?id={measurement_id}"></script>
+    <script integrity="{integrity}">{script_content}</script>"""
 
 
 @receiver(process_response, dispatch_uid="ga_process_response")
 def process_response_presale_csp(sender, request, response, **kwargs):
     measurement_id = sender.settings.get("measurement_id")
-    if measurement_id:
-        if "Content-Security-Policy" in response:
-            headers = _parse_csp(response["Content-Security-Policy"])
-        else:
-            headers = {}
+    if not measurement_id:
+        return response
 
-        _merge_csp(
-            headers,
-            {
-                "script-src": [
-                    "'self'",
-                    "'unsafe-inline'",
-                    "'unsafe-eval'",
-                    "https://www.googletagmanager.com",
-                    "https://tagmanager.google.com",
-                    "https://*.googletagmanager.com",
-                    "https://www.google-analytics.com",
-                    "https://ssl.google-analytics.com",
-                    "https://analytics.google.com",
-                ],
-                "style-src": [
-                    "'self'",
-                    "https://www.googletagmanager.com",
-                    "https://tagmanager.google.com",
-                    "https://fonts.googleapis.com",
-                ],
-                "img-src": [
-                    "'self'",
-                    "https://www.googletagmanager.com",
-                    "https://ssl.gstatic.com",
-                    "https://www.gstatic.com",
-                    "https://*.google-analytics.com",
-                    "https://*.googletagmanager.com",
-                    "https://www.google-analytics.com",
-                    "https://analytics.google.com",
-                    "https://*.google.de",
-                ],
-                "font-src": ["'self'", "https://fonts.gstatic.com", "data:"],
-                "connect-src": [
-                    "'self'",
-                    "https://*.google-analytics.com",
-                    "https://*.analytics.google.com",
-                    "https://*.googletagmanager.com",
-                    "https://www.google-analytics.com",
-                    "https://analytics.google.com",
-                    "https://*.doubleclick.net",
-                ],
-            },
-        )
+    headers = {}
+    if "Content-Security-Policy" in response:
+        headers = _parse_csp(response["Content-Security-Policy"])
 
-        if headers:
-            response["Content-Security-Policy"] = _render_csp(headers)
+    script_hash = getattr(request, "_ga_script_hash", None)
+    if script_hash:
+        _merge_csp(headers, {"script-src": [f"'{script_hash}'"]})
+
+    _merge_csp(
+        headers,
+        {
+            "script-src": [
+                "https://www.googletagmanager.com",
+                "https://tagmanager.google.com",
+                "https://*.googletagmanager.com",
+                "https://www.google-analytics.com",
+                "https://ssl.google-analytics.com",
+                "https://analytics.google.com",
+            ],
+            "style-src": [
+                "https://www.googletagmanager.com",
+                "https://tagmanager.google.com",
+                "https://fonts.googleapis.com",
+            ],
+            "img-src": [
+                "https://www.googletagmanager.com",
+                "https://ssl.gstatic.com",
+                "https://www.gstatic.com",
+                "https://*.google-analytics.com",
+                "https://*.googletagmanager.com",
+                "https://www.google-analytics.com",
+                "https://analytics.google.com",
+                "https://*.google.de",
+            ],
+            "font-src": ["https://fonts.gstatic.com", "data:"],
+            "connect-src": [
+                "https://*.google-analytics.com",
+                "https://*.analytics.google.com",
+                "https://*.googletagmanager.com",
+                "https://www.google-analytics.com",
+                "https://analytics.google.com",
+                "https://*.doubleclick.net",
+            ],
+        },
+    )
+
+    if headers:
+        response["Content-Security-Policy"] = _render_csp(headers)
 
     return response
