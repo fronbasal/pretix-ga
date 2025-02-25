@@ -1,11 +1,11 @@
 import logging
 import secrets
 from base64 import b64encode
-from hashlib import sha384
 
 from django.dispatch import receiver
 from django.urls import resolve, reverse
 from django.utils.translation import gettext_lazy as _
+
 from pretix.base.middleware import _merge_csp, _parse_csp, _render_csp
 from pretix.control.signals import nav_event_settings
 from pretix.presale.signals import html_page_header, process_response
@@ -27,7 +27,7 @@ def navbar_event_settings(sender, request, **kwargs):
                 },
             ),
             "active": url.namespace == "plugins:pretix_ga"
-            and url.url_name.startswith("settings"),
+                      and url.url_name.startswith("settings"),
         }
     ]
 
@@ -39,13 +39,11 @@ def html_page_header_presale(sender, request, **kwargs):
         return
     # Generate a sha256 integrity hash for the script tag
     script_content = f"""window.dataLayer=window.dataLayer||[];function gtag(){{dataLayer.push(arguments);}}gtag('js',new Date());gtag('config','{measurement_id}');"""
-    integrity = "sha384-" + b64encode(
-        sha384(script_content.encode("utf-8")).digest()
-    ).decode("utf-8")
+    nonce = b64encode(secrets.token_bytes(16)).decode("utf-8")
     # store integrity hash in request for later csp processing
-    request._ga_script_hash = integrity
+    request._ga_script_nonce = nonce
     return f"""<script async src="https://www.googletagmanager.com/gtag/js?id={measurement_id}"></script>
-    <script integrity="{integrity}">{script_content}</script>"""
+    <script nonce="{nonce}">{script_content}</script>"""
 
 
 @receiver(process_response, dispatch_uid="ga_process_response")
@@ -58,9 +56,9 @@ def process_response_presale_csp(sender, request, response, **kwargs):
     if "Content-Security-Policy" in response:
         headers = _parse_csp(response["Content-Security-Policy"])
 
-    script_hash = getattr(request, "_ga_script_hash", None)
-    if script_hash:
-        _merge_csp(headers, {"script-src": [f"'{script_hash}'"]})
+    script_nonce = getattr(request, "_ga_script_nonce", None)
+    if script_nonce:
+        _merge_csp(headers, {"script-src": [f"'nonce-{script_nonce}'"]})
 
     _merge_csp(
         headers,
@@ -88,7 +86,7 @@ def process_response_presale_csp(sender, request, response, **kwargs):
                 "https://analytics.google.com",
                 "https://*.google.de",
             ],
-            "font-src": ["https://fonts.gstatic.com", "data:"],
+            "font-src": ["https://fonts.gstatic.com"],
             "connect-src": [
                 "https://*.google-analytics.com",
                 "https://*.analytics.google.com",
